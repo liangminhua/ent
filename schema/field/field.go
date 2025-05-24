@@ -15,6 +15,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"entgo.io/ent/schema"
 )
@@ -233,7 +234,7 @@ func (b *stringBuilder) NotEmpty() *stringBuilder {
 func (b *stringBuilder) MaxLen(i int) *stringBuilder {
 	b.desc.Size = i
 	b.desc.Validators = append(b.desc.Validators, func(v string) error {
-		if len(v) > i {
+		if utf8.RuneCountInString(v) > i {
 			return errors.New("value is greater than the required length")
 		}
 		return nil
